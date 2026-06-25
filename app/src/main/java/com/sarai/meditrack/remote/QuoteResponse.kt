@@ -1,6 +1,6 @@
 package com.sarai.meditrack.data.remote
 
 data class QuoteResponse(
-    val content: String,
+    val phrase: String,
     val author: String
 )

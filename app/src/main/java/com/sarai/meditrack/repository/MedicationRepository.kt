@@ -10,13 +10,17 @@ class MedicationRepository(private val dao: MedicationDao) {
 
     fun getAllMedications(): Flow<List<Medication>> = dao.getAllMedications()
 
-    suspend fun getMedicationById(id: Int): Medication? = dao.getMedicationById(id)
+    suspend fun getMedicationById(id: Int): Medication? =
+        dao.getMedicationById(id)
 
-    suspend fun insertMedication(medication: Medication) = dao.insertMedication(medication)
+    suspend fun insertMedication(medication: Medication) =
+        dao.insertMedication(medication)
 
-    suspend fun updateMedication(medication: Medication) = dao.updateMedication(medication)
+    suspend fun updateMedication(medication: Medication) =
+        dao.updateMedication(medication)
 
-    suspend fun deleteMedication(medication: Medication) = dao.deleteMedication(medication)
+    suspend fun deleteMedication(medication: Medication) =
+        dao.deleteMedication(medication)
 
     suspend fun getRandomQuote(): Result<QuoteResponse> {
         return try {
