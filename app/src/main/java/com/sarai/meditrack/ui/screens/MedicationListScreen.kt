@@ -34,6 +34,8 @@ import com.sarai.meditrack.ui.theme.*
 import com.sarai.meditrack.viewmodel.MedicationListViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import com.sarai.meditrack.notifications.NotificationHelper
+
 
 // -- Colores por categoría ----------------------------------------------------
 private val categoryColors = mapOf(
@@ -162,6 +164,23 @@ fun MedicationListScreen(navController: NavController, onLogout: () -> Unit = {}
                 }
             }
         }
+        // Botón temporal para probar notificación local
+        Button(
+            onClick = {
+                NotificationHelper.sendMedicationReminder(
+                    context = context,
+                    medicationName = "Paracetamol",
+                    dose = "500mg",
+                    notificationId = 1
+                )
+            },
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(24.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = PurpleMid)
+        ) {
+            Text("🔔 Probar")
+        }
 
         // -- FAB --------------------------------------------------------------
         FloatingActionButton(
@@ -172,7 +191,7 @@ fun MedicationListScreen(navController: NavController, onLogout: () -> Unit = {}
                 .size(64.dp)
                 .shadow(12.dp, CircleShape),
             shape = CircleShape,
-            containerColor = CoralBright,
+            containerColor = FuchsiaBright,
             contentColor = Color.White
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Añadir", modifier = Modifier.size(28.dp))
@@ -565,7 +584,7 @@ fun EmptyState() {
             modifier = Modifier
                 .size(100.dp)
                 .background(
-                    brush = Brush.radialGradient(listOf(TealSurface, OffWhite)),
+                    brush = Brush.radialGradient(listOf(PurpleSurface, OffWhite)),
                     shape = CircleShape
                 ),
             contentAlignment = Alignment.Center
@@ -574,7 +593,7 @@ fun EmptyState() {
                 Icons.Rounded.Medication,
                 contentDescription = null,
                 modifier = Modifier.size(48.dp),
-                tint = TealMid.copy(alpha = 0.5f)
+                tint = PurpleMid.copy(alpha = 0.5f)
             )
         }
         Spacer(Modifier.height(24.dp))

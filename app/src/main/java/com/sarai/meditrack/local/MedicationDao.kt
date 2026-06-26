@@ -13,7 +13,7 @@ interface MedicationDao {
     suspend fun getMedicationById(id: Int): Medication?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMedication(medication: Medication)
+    suspend fun insertMedication(medication: Medication): Long
 
     @Update
     suspend fun updateMedication(medication: Medication)

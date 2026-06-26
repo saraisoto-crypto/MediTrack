@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "https://frasedeldia.azurewebsites.net/"
+    private const val BASE_URL = "https://meditrack-quotes-api.onrender.com/"
 
     val api: QuoteApiService by lazy {
         Retrofit.Builder()
