@@ -2,122 +2,110 @@ package com.sarai.meditrack.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// ══════════════════════════════════════════════════════════════════════════════
-// MediTrack — Paleta Morado Vibrante / Lavanda / Fucsia
-// ══════════════════════════════════════════════════════════════════════════════
+// ── Paleta morada dark llamativa ──────────────────────────────────────────────
 
-// Morados principales
-val PurpleDeep      = Color(0xFF3A0CA3)
-val PurpleMid       = Color(0xFF560BAD)
-val PurpleVibrant   = Color(0xFF7B2FBE)
-val PurpleLight     = Color(0xFFB185DB)
-val PurpleSurface   = Color(0xFFF0E6FF)
-val PurpleSoftBg    = Color(0xFFF8F3FF)
+// Usadas en MaterialTheme (Theme.kt)
+val PurpleNeon          = Color(0xFFB388FF)
+val PurpleVibrant       = Color(0xFF8B5CF6)
+val PurpleElectric      = Color(0xFFA855F7)
+val PurpleDeep          = Color(0xFF6D28D9)
+val PurplePrimaryDark   = Color(0xFF4A148C)
 
-// Acento fucsia/magenta
-val FuchsiaBright   = Color(0xFFE040FB)
-val FuchsiaSoft     = Color(0xFFFCE4FF)
-val FuchsiaDark     = Color(0xFFAA00FF)
+// Alias usados en screens y componentes
+val PurpleLight         = Color(0xFFD4AAFF)   // íconos claros, tints
+val PurpleMid           = Color(0xFF9B59F5)   // primario en campos, chips
+val PurpleSurface       = Color(0xFF2A1D4D)   // fondos de cards suaves
+val PurpleSoftBg        = Color(0xFF1E1433)   // fondo alternativo
 
-// Lavanda
-val LavenderMid     = Color(0xFF9B72CF)
-val LavenderLight   = Color(0xFFD7B8F3)
-val LavenderSurface = Color(0xFFEDE0FF)
+// Fondos y superficies
+val BackgroundDark      = Color(0xFF120B1F)
+val SurfaceDark         = Color(0xFF1E1433)
+val SurfaceVariantDark  = Color(0xFF2A1D4D)
 
-// Neutrales cálidos
-val OffWhite        = Color(0xFFFDFAFF)
-val SurfaceCard     = Color(0xFFF5F0FF)
-val OutlineLight    = Color(0xFFDDD5EC)
-val OutlineMid      = Color(0xFFBBB0D4)
+// Acentos
+val PinkAccent          = Color(0xFFFF4FD8)
+val FuchsiaBright       = Color(0xFFFF4FD8)   // alias de PinkAccent para FAB
+val CyanAccent          = Color(0xFF00E5FF)
 
 // Texto
-val TextPrimary     = Color(0xFF1A1028)
-val TextSecondary   = Color(0xFF4A3F5C)
-val TextTertiary    = Color(0xFF8C7FAA)
+val TextPrimary         = Color(0xFFF5F0FF)
+val TextSecondary       = Color(0xFFB8A9D9)
 
-// Semántico
-val SuccessGreen    = Color(0xFF2E7D32)
-val SuccessSurface  = Color(0xFFE8F5E9)
-val ErrorRed        = Color(0xFFB71C1C)
-val ErrorSurface    = Color(0xFFFFEBEE)
+// Semánticos
+val ErrorRed            = Color(0xFFFF5370)
+val ErrorSurface        = Color(0xFF3D1A1A)
+val SuccessGreen        = Color(0xFF4ADE80)
+val SuccessSurface      = Color(0xFF1A3D2A)
 
-// ── Alias usados por Theme.kt y pantallas (compatibilidad) ───────────────────
-// Theme.kt (esquema oscuro)
-val PurpleElectric     = PurpleVibrant
-val PinkAccent         = FuchsiaBright
-val CyanAccent         = Color(0xFF26C6DA)
-val BackgroundDark     = Color(0xFF120B1E)
-val SurfaceDark        = Color(0xFF1C1228)
-val SurfaceVariantDark = Color(0xFF2E2140)
+// Bordes y outlines
+val OutlineLight        = Color(0xFF4A3575)
+val OutlineMid          = Color(0xFF6A4FAA)
 
-// Pantallas (Detail/List/Quote) — paleta "teal/coral" mapeada a tu morado actual
-val TealMid      = PurpleMid
-val TealDeep     = PurpleDeep
-val CoralBright  = FuchsiaBright
-val TealSurface  = PurpleSurface
+// Neutrales (compatibilidad con screens anteriores)
+val TealDeep            = Color(0xFF1A0B2E)
+val TealMid             = Color(0xFFA855F7)
+val TealSurface         = Color(0xFF2A1D4D)
+val CoralBright         = Color(0xFFFF4FD8)
+val CoralSoft           = Color(0xFF3D2A5C)
+val OffWhite            = Color(0xFF1E1433)
 
-// ── Light Scheme ─────────────────────────────────────────────────────────────
-val md_theme_light_primary              = PurpleMid
+// ── Light Scheme (MaterialTheme) ──────────────────────────────────────────────
+val md_theme_light_primary              = PurpleElectric
 val md_theme_light_onPrimary            = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer     = PurpleSurface
-val md_theme_light_onPrimaryContainer   = PurpleDeep
-
-val md_theme_light_secondary            = LavenderMid
+val md_theme_light_onPrimaryContainer   = PurpleLight
+val md_theme_light_secondary            = PurpleNeon
 val md_theme_light_onSecondary          = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer   = LavenderSurface
-val md_theme_light_onSecondaryContainer = Color(0xFF21005D)
-
-val md_theme_light_tertiary             = FuchsiaBright
+val md_theme_light_secondaryContainer   = SurfaceVariantDark
+val md_theme_light_onSecondaryContainer = PurpleLight
+val md_theme_light_tertiary             = PinkAccent
 val md_theme_light_onTertiary           = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer    = FuchsiaSoft
-val md_theme_light_onTertiaryContainer  = Color(0xFF4A0072)
-
+val md_theme_light_tertiaryContainer    = CoralSoft
+val md_theme_light_onTertiaryContainer  = Color(0xFFFFD6FF)
 val md_theme_light_error                = ErrorRed
 val md_theme_light_onError              = Color(0xFFFFFFFF)
 val md_theme_light_errorContainer       = ErrorSurface
-val md_theme_light_onErrorContainer     = Color(0xFF410002)
-
-val md_theme_light_background           = OffWhite
+val md_theme_light_onErrorContainer     = Color(0xFFFFDAD6)
+val md_theme_light_background           = BackgroundDark
 val md_theme_light_onBackground         = TextPrimary
-val md_theme_light_surface              = Color(0xFFFFFFFF)
+val md_theme_light_surface              = SurfaceDark
 val md_theme_light_onSurface            = TextPrimary
-val md_theme_light_surfaceVariant       = SurfaceCard
+val md_theme_light_surfaceVariant       = SurfaceVariantDark
 val md_theme_light_onSurfaceVariant     = TextSecondary
 val md_theme_light_outline              = OutlineLight
 val md_theme_light_outlineVariant       = OutlineMid
-val md_theme_light_inverseSurface       = Color(0xFF2B2035)
-val md_theme_light_inverseOnSurface     = Color(0xFFF3EEFF)
-val md_theme_light_inversePrimary       = LavenderLight
+val md_theme_light_inverseSurface       = TextPrimary
+val md_theme_light_inverseOnSurface     = BackgroundDark
+val md_theme_light_inversePrimary       = PurpleDeep
 
-// ── Dark Scheme ──────────────────────────────────────────────────────────────
-val md_theme_dark_primary               = LavenderLight
+// ── Dark Scheme (mismo que light para mantener dark look) ─────────────────────
+val md_theme_dark_primary               = PurpleNeon
 val md_theme_dark_onPrimary             = PurpleDeep
-val md_theme_dark_primaryContainer      = Color(0xFF3D1A7A)
-val md_theme_dark_onPrimaryContainer    = Color(0xFFE9DAFF)
-
-val md_theme_dark_secondary             = Color(0xFFCDA8F0)
-val md_theme_dark_onSecondary           = Color(0xFF341A5C)
-val md_theme_dark_secondaryContainer    = Color(0xFF4C2A75)
-val md_theme_dark_onSecondaryContainer  = Color(0xFFE9DAFF)
-
-val md_theme_dark_tertiary              = Color(0xFFF5ABFF)
+val md_theme_dark_primaryContainer      = PurplePrimaryDark
+val md_theme_dark_onPrimaryContainer    = PurpleLight
+val md_theme_dark_secondary             = PurpleLight
+val md_theme_dark_onSecondary           = PurplePrimaryDark
+val md_theme_dark_secondaryContainer    = SurfaceVariantDark
+val md_theme_dark_onSecondaryContainer  = PurpleLight
+val md_theme_dark_tertiary              = PinkAccent
 val md_theme_dark_onTertiary            = Color(0xFF57006B)
-val md_theme_dark_tertiaryContainer     = Color(0xFF7C0099)
+val md_theme_dark_tertiaryContainer     = CoralSoft
 val md_theme_dark_onTertiaryContainer   = Color(0xFFFFD6FF)
-
-val md_theme_dark_error                 = Color(0xFFFFB4AB)
+val md_theme_dark_error                 = ErrorRed
 val md_theme_dark_onError               = Color(0xFF690005)
-val md_theme_dark_errorContainer        = Color(0xFF93000A)
+val md_theme_dark_errorContainer        = ErrorSurface
 val md_theme_dark_onErrorContainer      = Color(0xFFFFDAD6)
-
-val md_theme_dark_background            = Color(0xFF120B1E)
-val md_theme_dark_onBackground          = Color(0xFFEDE5FF)
-val md_theme_dark_surface               = Color(0xFF1C1228)
-val md_theme_dark_onSurface             = Color(0xFFEDE5FF)
-val md_theme_dark_surfaceVariant        = Color(0xFF2E2140)
-val md_theme_dark_onSurfaceVariant      = Color(0xFFCDBFE8)
-val md_theme_dark_outline               = Color(0xFF4A3D60)
-val md_theme_dark_outlineVariant        = Color(0xFF352748)
-val md_theme_dark_inverseSurface        = Color(0xFFEDE5FF)
-val md_theme_dark_inverseOnSurface      = Color(0xFF1C1228)
-val md_theme_dark_inversePrimary        = PurpleMid
+val md_theme_dark_background            = BackgroundDark
+val md_theme_dark_onBackground          = TextPrimary
+val md_theme_dark_surface               = SurfaceDark
+val md_theme_dark_onSurface             = TextPrimary
+val md_theme_dark_surfaceVariant        = SurfaceVariantDark
+val md_theme_dark_onSurfaceVariant      = TextSecondary
+val md_theme_dark_outline               = OutlineLight
+val md_theme_dark_outlineVariant        = OutlineMid
+val md_theme_dark_inverseSurface        = TextPrimary
+val md_theme_dark_inverseOnSurface      = BackgroundDark
+val md_theme_dark_inversePrimary        = PurpleElectric
+val TextLight = Color(0xFFF5F0FF) // alias de TextPrimary
+val Error     = Color(0xFFFF5370)   // alias de ErrorRed
+val TextMedium = Color(0xFFB8A9D9)   // alias de TextSecondary

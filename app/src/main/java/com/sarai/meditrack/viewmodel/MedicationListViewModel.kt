@@ -5,18 +5,39 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.sarai.meditrack.data.local.Medication
 import com.sarai.meditrack.data.repository.MedicationRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MedicationListViewModel(
     private val repository: MedicationRepository
 ) : ViewModel() {
 
-    val medications: StateFlow<List<Medication>> = repository
+    // Todas las medicaciones de Room
+    private val _allMedications: StateFlow<List<Medication>> = repository
         .getAllMedications()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // Filtro seleccionado (null = mostrar todas)
+    private val _selectedCategory = MutableStateFlow<String?>(null)
+    val selectedCategory: StateFlow<String?> = _selectedCategory.asStateFlow()
+
+    // Lista filtrada que observa la UI
+    val medications: StateFlow<List<Medication>> = combine(
+        _allMedications,
+        _selectedCategory
+    ) { all, category ->
+        if (category == null) all
+        else all.filter { it.category == category }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // Categorías disponibles (solo las que tienen medicamentos)
+    val availableCategories: StateFlow<List<String>> = _allMedications
+        .map { list -> list.map { it.category }.distinct().sorted() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    fun setFilter(category: String?) {
+        _selectedCategory.value = category
+    }
 
     fun deleteMedication(medication: Medication) {
         viewModelScope.launch {

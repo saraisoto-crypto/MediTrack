@@ -1,13 +1,18 @@
 package com.sarai.meditrack.notifications
 
+import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class MediTrackFirebaseService : FirebaseMessagingService() {
 
-    // ── Se llama cuando llega una notificación push con la app en primer plano ─
+    private val TAG = "FCMService"
+
+    // ── Llega notificación push con la app abierta ────────────────────────────
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+
+        Log.d(TAG, "Mensaje FCM recibido de: ${remoteMessage.from}")
 
         val title = remoteMessage.notification?.title
             ?: remoteMessage.data["title"]
@@ -17,19 +22,18 @@ class MediTrackFirebaseService : FirebaseMessagingService() {
             ?: remoteMessage.data["body"]
             ?: "Tienes un nuevo recordatorio"
 
-        // Mostrar como notificación local cuando la app está abierta
         NotificationHelper.sendMedicationReminder(
-            context          = applicationContext,
-            medicationName   = title,
-            dose             = body,
-            notificationId   = System.currentTimeMillis().toInt()
+            context        = applicationContext,
+            medicationName = title,
+            dose           = body,
+            notificationId = System.currentTimeMillis().toInt()
         )
     }
 
-    // ── Se llama cuando Firebase renueva el token del dispositivo ─────────────
+    // ── Token renovado — guardarlo automáticamente ────────────────────────────
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        // En una app real, aquí se enviaría el token al servidor
-        // Para el proyecto, Firebase lo gestiona automáticamente
+        Log.d(TAG, "Token FCM renovado: $token")
+        TokenManager.saveToken(applicationContext, token)
     }
 }

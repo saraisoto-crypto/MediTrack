@@ -9,7 +9,6 @@ import java.util.Calendar
 
 object AlarmScheduler {
 
-    // ── Programar alarma diaria para un medicamento ───────────────────────────
     fun scheduleAlarm(context: Context, medication: Medication) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -26,30 +25,32 @@ object AlarmScheduler {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Parsear "HH:mm" del campo time
+        // Parsear HH:mm
         val parts = medication.time.trim().split(":")
         if (parts.size != 2) return
         val hour   = parts[0].toIntOrNull() ?: return
         val minute = parts[1].toIntOrNull() ?: return
 
-        // PRUEBA: dispara en 1 minuto
         val calendar = Calendar.getInstance().apply {
-            add(Calendar.MINUTE, 1)
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(Calendar.DAY_OF_YEAR, 1)
+            }
         }
 
-        // Alarma que se repite cada día a la misma hora
-        alarmManager.setRepeating(
+        // Funciona en emulador y dispositivos reales
+        alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
     }
 
-    // ── Cancelar alarma de un medicamento ─────────────────────────────────────
     fun cancelAlarm(context: Context, medicationId: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         val intent = Intent(context, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context,

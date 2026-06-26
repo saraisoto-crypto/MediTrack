@@ -14,11 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,282 +41,196 @@ fun QuoteScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(TealDeep, Color(0xFF102A28)),
-                    start = Offset(0f, 0f),
-                    end = Offset(0f, Float.POSITIVE_INFINITY)
-                )
-            )
+            .background(BackgroundDark)
     ) {
-        // Decoración: círculos difusos
-        Box(
-            modifier = Modifier
-                .size(350.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = 100.dp, y = (-80).dp)
-                .alpha(0.06f)
-                .background(Color.White, CircleShape)
-        )
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.BottomStart)
-                .offset(x = (-60).dp, y = 60.dp)
-                .alpha(0.05f)
-                .background(CoralBright, CircleShape)
-        )
+        QuoteBackgroundDecoration()
 
-        // Top bar
-        TopAppBar(
-            title = {
-                Column {
-                    Text(
-                        "INSPIRACIÓN",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = Color.White.copy(alpha = 0.6f),
-                        letterSpacing = 2.5.sp
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Dosis de Inspiración",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Black,
+                            color = Color.White
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Volver", tint = Color.White)
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent
                     )
-                }
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .background(Color.White.copy(alpha = 0.10f), CircleShape)
-                ) {
-                    Icon(
-                        Icons.AutoMirrored.Rounded.ArrowBack,
-                        contentDescription = "Volver",
-                        tint = Color.White
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
-        )
-
-        // Contenido centrado
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 28.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            Crossfade(
-                targetState = uiState.isLoading,
-                label = "QuoteFade",
-                animationSpec = tween(600)
-            ) { isLoading ->
-                when {
-                    isLoading        -> QuoteLoadingView()
-                    uiState.error != null -> QuoteErrorView(
-                        message = uiState.error!!,
-                        onRetry = { viewModel.loadQuote() }
-                    )
-                    else             -> QuoteContentView(
-                        quote  = uiState.quote,
-                        author = uiState.author,
-                        onRefresh = { viewModel.loadQuote() }
-                    )
+                )
+            }
+        ) { padding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                Crossfade(
+                    targetState = uiState.isLoading,
+                    label = "QuoteFade",
+                    animationSpec = tween(600)
+                ) { isLoading ->
+                    when {
+                        isLoading -> QuoteLoadingView()
+                        uiState.error != null -> QuoteErrorView(
+                            message = uiState.error!!,
+                            onRetry = { viewModel.loadQuote() }
+                        )
+                        else -> QuoteContentView(
+                            quote = uiState.quote,
+                            author = uiState.author,
+                            onRefresh = { viewModel.loadQuote() }
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-// ── Contenido principal de la frase ──────────────────────────────────────────
+@Composable
+fun QuoteBackgroundDecoration() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .size(300.dp)
+                .align(Alignment.TopEnd)
+                .offset(x = 100.dp, y = (-50).dp)
+                .blur(80.dp)
+                .alpha(0.35f)
+                .background(PurpleElectric, CircleShape)
+        )
+        Box(
+            modifier = Modifier
+                .size(250.dp)
+                .align(Alignment.BottomStart)
+                .offset(x = (-80).dp, y = 100.dp)
+                .blur(80.dp)
+                .alpha(0.3f)
+                .background(PinkAccent, CircleShape)
+        )
+    }
+}
 
 @Composable
 private fun QuoteContentView(quote: String, author: String, onRefresh: () -> Unit) {
     Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(36.dp)
+        verticalArrangement = Arrangement.spacedBy(40.dp)
     ) {
-        // Card editorial
-        Card(
+        ElevatedCard(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(32.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White.copy(alpha = 0.07f)
-            ),
-            elevation = CardDefaults.cardElevation(0.dp)
+            colors = CardDefaults.elevatedCardColors(containerColor = SurfaceDark),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp)
         ) {
-            Box(modifier = Modifier.padding(32.dp)) {
-                // Comillas decorativas grandes
-                Text(
-                    text = "\u201C",
-                    fontSize = 120.sp,
-                    color = CoralBright.copy(alpha = 0.25f),
-                    fontWeight = FontWeight.Black,
-                    lineHeight = 80.sp,
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .offset(x = (-8).dp, y = (-16).dp)
+            Column(
+                modifier = Modifier.padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    Icons.Rounded.FormatQuote,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp).alpha(0.3f),
+                    tint = PurpleLight
                 )
 
-                Column(
-                    modifier = Modifier.padding(top = 36.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(28.dp)
-                ) {
-                    // Texto de la frase
-                    AnimatedContent(
-                        targetState = quote,
-                        label = "QuoteText",
-                        transitionSpec = {
-                            fadeIn(tween(400)) togetherWith fadeOut(tween(200))
-                        }
-                    ) { q ->
-                        Text(
-                            text = q,
-                            style = MaterialTheme.typography.headlineSmall.copy(
-                                fontStyle  = FontStyle.Italic,
-                                lineHeight = 34.sp,
-                                fontWeight = FontWeight.Light,
-                                textAlign  = TextAlign.Center
-                            ),
-                            color = Color.White
-                        )
-                    }
+                Spacer(modifier = Modifier.height(16.dp))
 
-                    // Separador + autor
-                    AnimatedContent(
-                        targetState = author,
-                        label = "AuthorText",
-                        transitionSpec = {
-                            fadeIn(tween(400)) togetherWith fadeOut(tween(200))
-                        }
-                    ) { a ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            // Línea coral
-                            Box(
-                                modifier = Modifier
-                                    .width(40.dp)
-                                    .height(2.dp)
-                                    .background(CoralBright, RoundedCornerShape(1.dp))
-                            )
-                            Text(
-                                text = a.ifEmpty { "Anónimo" }.uppercase(),
-                                style = MaterialTheme.typography.labelLarge.copy(
-                                    letterSpacing = 2.sp,
-                                    fontWeight    = FontWeight.Bold
-                                ),
-                                color = CoralBright
-                            )
-                        }
-                    }
-                }
+                Text(
+                    text = quote,
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        lineHeight = 38.sp,
+                        textAlign = TextAlign.Center
+                    ),
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Box(
+                    modifier = Modifier
+                        .width(40.dp)
+                        .height(4.dp)
+                        .background(Brush.linearGradient(listOf(PurpleElectric, PinkAccent)), CircleShape)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = author.ifEmpty { "Anónimo" }.uppercase(),
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        letterSpacing = 2.sp,
+                        fontWeight = FontWeight.Black
+                    ),
+                    color = PurpleLight
+                )
             }
         }
 
-        // Botón nueva frase
         Button(
             onClick = onRefresh,
             modifier = Modifier
-                .fillMaxWidth(0.80f)
-                .height(56.dp),
+                .fillMaxWidth()
+                .height(64.dp),
             shape = RoundedCornerShape(20.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = CoralBright),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
+            contentPadding = PaddingValues(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
         ) {
-            Icon(Icons.Rounded.AutoAwesome, contentDescription = null, modifier = Modifier.size(20.dp), tint = Color.White)
-            Spacer(Modifier.width(10.dp))
-            Text(
-                "Nueva frase",
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                letterSpacing = 0.5.sp
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Brush.linearGradient(listOf(PurpleElectric, PinkAccent)), RoundedCornerShape(20.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Rounded.Refresh, contentDescription = null, tint = Color.White)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text("NUEVA FRASE", fontWeight = FontWeight.Bold, letterSpacing = 1.sp, color = Color.White)
+                }
+            }
         }
-
-        // Hint
-        Text(
-            "Cada frase es un recordatorio de que tu bienestar importa.",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.White.copy(alpha = 0.35f),
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
     }
 }
-
-// ── Loading ───────────────────────────────────────────────────────────────────
 
 @Composable
 private fun QuoteLoadingView() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(52.dp),
-            color = CoralBright,
-            strokeWidth = 4.dp,
-            trackColor = Color.White.copy(alpha = 0.10f)
-        )
-        Text(
-            "Buscando inspiración...",
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White.copy(alpha = 0.55f)
-        )
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        CircularProgressIndicator(color = PurpleElectric)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Buscando inspiración...", style = MaterialTheme.typography.bodyLarge, color = Color.White)
     }
 }
-
-// ── Error ─────────────────────────────────────────────────────────────────────
 
 @Composable
 private fun QuoteErrorView(message: String, onRetry: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(32.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .background(Color.White.copy(alpha = 0.08f), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                Icons.Rounded.WifiOff,
-                contentDescription = null,
-                modifier = Modifier.size(36.dp),
-                tint = CoralBright
-            )
-        }
-        Text(
-            "Sin conexión",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-        Text(
-            message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.White.copy(alpha = 0.5f),
-            textAlign = TextAlign.Center
-        )
-        OutlinedButton(
+        Icon(Icons.Rounded.ErrorOutline, null, modifier = Modifier.size(64.dp), tint = Error)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(message, textAlign = TextAlign.Center, color = Color.White)
+        Spacer(modifier = Modifier.height(24.dp))
+        Button(
             onClick = onRetry,
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonColors(
-                containerColor = Color.Transparent,
-                contentColor   = Color.White,
-                disabledContainerColor = Color.Transparent,
-                disabledContentColor   = Color.White.copy(alpha = 0.3f)
-            ),
-            border = androidx.compose.foundation.BorderStroke(1.5.dp, Color.White.copy(alpha = 0.3f))
+            colors = ButtonDefaults.buttonColors(containerColor = PurpleElectric)
         ) {
-            Icon(Icons.Rounded.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text("Reintentar", fontWeight = FontWeight.SemiBold)
+            Text("Reintentar", color = Color.White)
         }
     }
 }
