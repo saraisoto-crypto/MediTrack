@@ -91,7 +91,7 @@ private fun minutosHasta(horaTexto: String): Long? {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MedicationListScreen(navController: NavController) {
+fun MedicationListScreen(navController: NavController, onLogout: () -> Unit = {}) {
     val context = LocalContext.current
     val app = context.applicationContext as MediTrackApp
     val viewModel: MedicationListViewModel = viewModel(
@@ -108,7 +108,7 @@ fun MedicationListScreen(navController: NavController) {
 
             // -- Hero Header con saludo dinámico ----------------------------
             item {
-                HeroHeader(onQuoteTap = { navController.navigate("quotes") })
+                HeroHeader(onQuoteTap = { navController.navigate("quotes") }, onLogout = onLogout)
             }
 
             // -- Próxima toma (real, calculada de tus datos) ----------------
@@ -183,7 +183,7 @@ fun MedicationListScreen(navController: NavController) {
 // -- Hero Header --------------------------------------------------------------
 
 @Composable
-private fun HeroHeader(onQuoteTap: () -> Unit) {
+private fun HeroHeader(onQuoteTap: () -> Unit, onLogout: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -255,6 +255,21 @@ private fun HeroHeader(onQuoteTap: () -> Unit) {
                         Icon(Icons.Rounded.AutoAwesome, contentDescription = null, tint = Color(0xFF6D28D9), modifier = Modifier.size(16.dp))
                         Text("Frase del día", style = MaterialTheme.typography.labelMedium, color = Color(0xFF6D28D9), fontWeight = FontWeight.Bold)
                     }
+                }
+                Spacer(Modifier.width(8.dp))
+                // Botón cerrar sesión
+                IconButton(
+                    onClick = onLogout,
+                    modifier = Modifier
+                        .size(36.dp)
+                        .background(Color.White.copy(alpha = 0.18f), CircleShape)
+                ) {
+                    Icon(
+                        Icons.Rounded.Logout,
+                        contentDescription = "Cerrar sesión",
+                        tint = Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
                 }
             }
 
